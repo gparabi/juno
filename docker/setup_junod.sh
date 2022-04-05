@@ -17,10 +17,14 @@ if [ -f "$GENESIS_FILE" ]; then
   echo "$GENESIS_FILE exists..."
 else
   echo "$GENESIS_FILE does not exist. Generating..."
-
+"unbonding_time":"1814400s"
   junod init --chain-id "$CHAIN_ID" "$MONIKER"
   # staking/governance token is hardcoded in config, change this
   sed -i "s/\"stake\"/\"$STAKE\"/" "$GENESIS_FILE"
+  # speed up unbonding time
+  sed -i 's/"unbonding_time": "1814400s"/"unbonding_time": "300s"/' "$GENESIS_FILE"
+  # significantly increase inflation
+  sed -i 's/"inflation":"0.130000000000000000"/"inflation":"100.000000000000000000"/' "$GENESIS_FILE"
   # this is essential for sub-1s block times (or header times go crazy)
   sed -i 's/"time_iota_ms": "1000"/"time_iota_ms": "10"/' "$GENESIS_FILE"
   # change gas limit to mainnet value
