@@ -42,6 +42,7 @@ if [ -n $UNSAFE_CORS ]; then
   sed -n '1h;1!H;${g;s/# Enable defines if the API server should be enabled.\nenable = false/enable = true/;p;}' "$APP_TOML_CONFIG" > "$APP_TOML_CONFIG_NEW"
   mv "$APP_TOML_CONFIG_NEW" "$APP_TOML_CONFIG"
   # ...and breathe
+  sed -i "s/create_empty_blocks = true/create_empty_blocks = false/" "$APP_TOML_CONFIG"
   sed -i "s/enabled-unsafe-cors = false/enabled-unsafe-cors = true/" "$APP_TOML_CONFIG"
   sed -i "s/cors_allowed_origins = \[\]/cors_allowed_origins = \[\"\*\"\]/" "$CONFIG_TOML_CONFIG"
 fi
